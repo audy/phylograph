@@ -2,6 +2,20 @@
 require 'optparse'
 
 class Phylograph
+  def self.create_adjacency_matrix(scores)
+    adjacency_matrix = Array.new
+      scores.each_with_index do |row, n|
+      column = row.index(row.max)
+      if n == column
+        next
+      else
+        adjacency_matrix << n
+        adjacency_matrix << column
+      end
+    end
+    adjacency_matrix.flatten
+  end
+  
   def self.pairwise_align(set_a, set_b)
     combinations = set_a.product(set_b)
 

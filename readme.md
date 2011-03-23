@@ -41,8 +41,7 @@ The second goal of the experiment would be to construct graphs for different sin
     3. How many edges per vertex? Use all or cutoff at some threshold?
     
   c. Graph alignment
-    1. Local?
-    2. Global?
+    1. Maximal Clique Searching via Bron-Kerbosch Algorithm
     
 2. Testing correctness
 

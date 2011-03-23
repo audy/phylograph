@@ -5,7 +5,7 @@ Dir.glob('./lib/*.rb').each { |file| require file }
 require 'progressbar'
 require 'parallel'
 
-PERCENT_IDENTITY = 99
+PERCENT_IDENTITY = 80
 CUTOFF = 5
 BANDWIDTH = nil
 
@@ -29,41 +29,25 @@ class Phylograph
     clusters.each_key do |filename|     
       $stderr.puts " - #{filename}" 
       sequences = clusters[filename][:reps].values
-#      clusters[filename][:scores] = pairwise_align sequences, sequences
+      clusters[filename][:scores] = pairwise_align sequences, sequences
       break
     end
     
     $stderr.puts "Align samples"
     set_a = clusters[clusters.keys[0]][:reps].values
     set_b = clusters[clusters.keys[1]][:reps].values
-    scores_between_samples = pairwise_align set_a, set_b
+#    scores_between_samples = pairwise_align set_a, set_b
     clusters[:both] = Hash.new
-    clusters[:both][:scores] = scores_between_samples
+#    clusters[:both][:scores] = scores_between_samples
     
     # Create adjacency matrices from scores
     # 1,2, 1,3, ... = 1->2 & 1->3
     
-    adjacency_matrix = Array.new
-    clusters[:both][:scores].each_with_index do |row, n|
-      column = row.index(row.max)
-      if n == column
-        next
-      else
-        adjacency_matrix << n
-        adjacency_matrix << column
-      end
-    end
+    adjacency_matrix = create_adjacency_matrix clusters.first[1][:scores]
     
-    graph = Graph.make_graph adjacency_matrix.flatten
-    p graph
-    
-    p graph.methods
-    
+    graph = Graph.make_graph adjacency_matrix
     p graph.write_to_graphic_file(fmt='png', dotfile="graph")
     
-# Draw Graph    
-#    `twopi -Tpdf graph.dot -o graph.pdf`
-#    `open graph.pdf`
     
   end
 end
