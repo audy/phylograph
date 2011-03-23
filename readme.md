@@ -35,18 +35,22 @@ The second goal of the experiment would be to construct graphs for different sin
   e. Output format: graphical?
 
 1. Need to implement
-  a. Clustering algorithm 
+
+  a. Clustering algorithm
     - Implement using CD-HIT as it can cluster and generate rep. sequences
     - Possibly implement own approach if needed
+    
   b. Graph construction
     - Edge weights = Sequence similarity (N/W edit distance) 
     - Node weight? (could be based on number of sequences that exist in each cluster)
     - How many edges per vertex? Use all or cutoff at some threshold?
+    
   c. Graph alignment
     - Local?
     - Global?
     
 2. Testing correctness
+
   a. What defines success in this scenario? Compare against existing methods (such as comparison to a 16S database and finding statistically significant differences based on number of reads, alignment of phylogenetic trees) which have already proven (are widely considered) to be robust.
     
 ## (Some) Relavent Literature
