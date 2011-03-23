@@ -32,17 +32,17 @@ The second goal of the experiment would be to construct graphs for different sin
 1. Need to implement
 
   a. Clustering algorithm
-    - Implement using CD-HIT as it can cluster and generate rep. sequences
-    - Possibly implement own approach if needed
+    1. Implement using CD-HIT as it can cluster and generate rep. sequences
+    2. Possibly implement own approach if needed
     
   b. Graph construction
-    - Edge weights = Sequence similarity (N/W edit distance) 
-    - Node weight? (could be based on number of sequences that exist in each cluster)
-    - How many edges per vertex? Use all or cutoff at some threshold?
+    1. Edge weights = Sequence similarity (N/W edit distance) 
+    2. Node weight? (could be based on number of sequences that exist in each cluster)
+    3. How many edges per vertex? Use all or cutoff at some threshold?
     
   c. Graph alignment
-    - Local?
-    - Global?
+    1. Local?
+    2. Global?
     
 2. Testing correctness
 
