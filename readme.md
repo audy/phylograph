@@ -18,11 +18,6 @@ The second goal of the experiment would be to construct graphs for different sin
 
 ## TODO
 
- 1. Implement a clustering algorithm (DONE, with CD-HIT)
- 2. Implement pairwise alignment algorithm
-  - Needleman-Wunsch
- 3. Implement graph construction algorithm
-  - From similarity matrix
  4. Implement graph alignment algorithm
 
 ## Project Plan
