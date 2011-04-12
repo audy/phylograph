@@ -4,7 +4,7 @@ CLEAN.include('cd-hit-v4.3-2010-10-25', 'cd-hit-v4.3-2010-10-25.tgz')
 CLOBBER.include('lib/cd-hit-est')
 
 task :default do
-  sh './phylograph -r data/test_a.fasta,data/test_b.fasta \
+  sh './phylograph.rb -r data/short_a.fasta,data/short_b.fasta \
      -o test_output.txt'
 end
 

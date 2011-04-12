@@ -11,11 +11,6 @@ module Needleman
       m = Matrice.new a.length, b.length, 0
       m.set_row 0, (0..a.length).to_a
       m.set_column 0, (0..b.length).to_a
-      
-      # Add: skip over obviously bad alignments by counting letter composition.
-      
-      
-      
     
       # Ruby doesn't like to iterate through a string, so make them arrays
       a, b = a.split(//), b.split(//)
@@ -50,12 +45,9 @@ module Needleman
           m[i, j] = scores.min
         end
       end
-      # Find and return best edit distance
-      if bandwidth
-        [m.get_row(-1).last(bandwidth).min, m.get_column(-1).last(bandwidth).min].min
-      else
-        [m.get_row(-1).min, m.get_column(-1).min].min
-      end
+
+      [m.get_row(-1).min, m.get_column(-1).min].min
+  
     end
   end
 end
