@@ -37,7 +37,7 @@ class Phylograph
     scores = Parallel.map(combinations) do |a, b|  
       score =
         if (a.length - b.length).abs < CUTOFF
-          score = Needleman::Wunsch.align a, b, BANDWIDTH
+          score = Needleman::Wunsch.align a, b
           if score > ALIGN_AT
             score
           else

@@ -43,13 +43,22 @@ class Phylograph
     clusters[:both] = Hash.new
     clusters[:both][:scores] = scores_between_samples
     
+    matrices = Hash.new
+    
     @options[:filenames].each do |filename|
-      matrix = create_adjacency_matrix clusters[filename][:scores], nodup=false
-      puts matrix.inspect
+      matrix = create_adjacency_matrix clusters[filename][:scores], nodup=true
+      matrices[filename] = matrix
     end
     
-    matrix = create_adjacency_matrix clusters[:both][:scores], nodup=true
-    puts matrix.inspect
+    matrix = create_adjacency_matrix clusters[:both][:scores], nodup=false
+    matrices[:both] = matrix
+    
+    # Now make graphs
+    matrices.keys do |key|
+      graph = Graph.make_graph matrices[key]
+      puts "#{key}"
+      puts "#{graph.inspecct}"
+    end
     
   end
 end
