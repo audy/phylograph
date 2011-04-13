@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 # Needleman Wunsch Algorithm
 # Returns edit distance
-# Supports bandwidth (for time not space complexity)
 
 module Needleman
   class Wunsch
-    def self.align(a, b, bandwidth=nil)
+    def self.align(a, b)
 
       # Initialize a matrix, set row/column scores
       m = Matrice.new a.length, b.length, 0
@@ -22,15 +21,7 @@ module Needleman
         index += 1
         b.each_with_index do |r, j|
           j += 1
-        
-          # Banded global alignment FIX!!!
-          if bandwidth
-            if ((index-i).abs > bandwidth) || ((index-j).abs > bandwidth)
-              matrix[i, j] = matrix[i-1, j-1] + index
-              next
-            end
-          end
-        
+                
           # Compute score
           scores = []
           if l == r
@@ -45,10 +36,9 @@ module Needleman
           m[i, j] = scores.min
         end
       end
-
       edit_distance = [m.get_row(-1).min, m.get_column(-1).min].min
-      shortest_length = [a.length, b.length].min
-      score = (shortest_length - edit_distance)/shortest_length.to_f
+      longest_length = [a.length, b.length].max.to_f
+      score = (longest_length - edit_distance)/longest_length
       return score
     end
   end

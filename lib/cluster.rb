@@ -4,7 +4,7 @@ class Cluster
   def self.compute_clusters(similarity, filename)  
     output = "#{filename}_out"
     # Compute clusters    
-    #run_cdhit filename, output, similarity
+    run_cdhit filename, output, similarity
     
     # Parse CDHIT Output
     parse_cdhit output

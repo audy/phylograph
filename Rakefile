@@ -5,7 +5,7 @@ CLOBBER.include('lib/cd-hit-est')
 
 task :default do
   sh 'mkdir -p out'
-  sh './phylograph.rb -r data/pa.fa,data/pb.fa \
+  sh './phylograph.rb -r data/pa.fa,data/paa.fa \
      -o out/sequences.fa'
   Dir.glob('out/*.dot') do |file|
     sh "python make_graphs.py #{file} > #{file}.fix"
