@@ -2,24 +2,28 @@
 require 'optparse'
 
 class Phylograph
+  
+  # CREATE ADJACENCY MATRICES
   def self.create_adjacency_matrix(scores, nodup=true)
-    max, best = 0, nil
-    matrix = Hash.new
+    matrix = Array.new
     scores.each_with_index do |row, i|
-      row.each_with_index do |v, j|
-        if (nodup and (i != j)) and (v > max)
-          max = v
-          best = i
-        elsif !nodup and (v > max)
-          max = v
-          best = i
+      max, best = -1, 0
+      row.each_with_index do |score, j|
+        if (score > max)
+          if nodup and (i != j)
+            max, best = score, j
+          elsif !nodup
+            max, best = score, j
+          end
         end
       end
-      matrix[[i, best]] = max
+      if max > 0
+        matrix << [i, best]
+      end
     end
-    matrix
+    matrix.flatten
   end
-  
+    
   def self.pairwise_align(set_a, set_b)
     combinations = set_a.product(set_b)
 
@@ -33,7 +37,7 @@ class Phylograph
     scores = Parallel.map(combinations) do |a, b|  
       score =
         if (a.length - b.length).abs < CUTOFF
-          score = Needleman::Wunsch.align a, b
+          score = Needleman::Wunsch.align a, b, BANDWIDTH
           if score > ALIGN_AT
             score
           else
