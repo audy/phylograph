@@ -4,12 +4,10 @@ require 'optparse'
 class Phylograph
   def self.create_adjacency_matrix(scores, nodup=false)
     adjacency_matrix = Array.new
-
+    
     scores.each_with_index do |row, n|
       column = row.index(row.min)
-      if n == column
-        next
-      elsif !nodup
+      if !nodup and (n != column)
         adjacency_matrix << n
         adjacency_matrix << column
       elsif (adjacency_matrix.index(n) == nil) \
@@ -34,8 +32,13 @@ class Phylograph
 
     scores = Parallel.map(combinations) do |a, b|  
       score =
-        if (a.length - b.length).abs < ALIGN_AT
-          Needleman::Wunsch.align a, b, BANDWIDTH
+        if (a.length - b.length).abs < CUTOFF
+          score = Needleman::Wunsch.align a, b, BANDWIDTH
+          if score > ALIGN_AT
+            score
+          else
+            -1
+          end
         else
           -1
         end

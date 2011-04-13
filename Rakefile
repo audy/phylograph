@@ -4,8 +4,14 @@ CLEAN.include('cd-hit-v4.3-2010-10-25', 'cd-hit-v4.3-2010-10-25.tgz')
 CLOBBER.include('lib/cd-hit-est')
 
 task :default do
-  sh './phylograph.rb -r data/test_a.fasta,data/test_b.fasta \
-     -o test_output.txt'
+  sh 'mkdir -p out'
+  sh './phylograph.rb -r data/pa.fa,data/pb.fa \
+     -o out/sequences.fa'
+  Dir.glob('out/*.dot') do |file|
+    sh "python make_graphs.py #{file} > #{file}.fix"
+    sh "dot -Tpdf #{file}.fix > #{file}.pdf"
+    sh "open #{file}.pdf"
+  end
 end
 
 task :test do

@@ -46,8 +46,10 @@ module Needleman
         end
       end
 
-      [m.get_row(-1).min, m.get_column(-1).min].min
-  
+      edit_distance = [m.get_row(-1).min, m.get_column(-1).min].min
+      shortest_length = [a.length, b.length].min
+      score = (shortest_length - edit_distance)/shortest_length.to_f
+      return score
     end
   end
 end
