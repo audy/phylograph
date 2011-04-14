@@ -18,7 +18,7 @@ class Phylograph
         end
       end
       if max > 0
-        matrix << [i, best]
+        matrix << [i, best] #unless matrix.flatten.include? best
       end
     end
     matrix.flatten

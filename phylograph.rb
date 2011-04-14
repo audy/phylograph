@@ -6,8 +6,8 @@ require 'progressbar'
 require 'parallel'
 require 'set'
 
-CLUSTER_AT = 95
-ALIGN_AT = 0.96
+CLUSTER_AT = 99
+ALIGN_AT = 0.20
 CUTOFF = 5
 
 class Phylograph
@@ -73,11 +73,10 @@ class Phylograph
     first = matrices[@options[:filenames][0]].chunk(2).collect{ |x| x.sort! }
     
     # Get rid of baddies
-    second.chunk(2).delete_if{ |x| x.include? nil }
-    second = matrices[@options[:filenames][1]].chunk(2).collect{ |x| x.sort! }
+    second = matrices[@options[:filenames][1]].chunk(2).delete_if{ |x| x.include? nil}.collect{ |x| x.sort! }
     
     # Fancy subgraph finding algorithm
-    consensus =  Graph.make_graph (first & second).flatten
+    consensus = Graph.make_graph (first & second).flatten
     consensus.write_to_graphic_file
     `mv graph.dot out/consensus.dot`
     
@@ -88,6 +87,14 @@ class Phylograph
       puts "#{graph.inspect}"
       graph.write_to_graphic_file
       `mv graph.dot out/#{File.basename(key.to_s)}.dot`
+    end
+    
+    # Print FASTA file
+    output = File.new(@options[:output], 'w')
+    (first & second).flatten.each do |node|
+      sequence = clusters.values[0][:reps][node]
+      counts = clusters.values[0][:counts][node]
+      output.write(">#{node}:#{counts}\n#{sequence}\n")
     end
     
   end
