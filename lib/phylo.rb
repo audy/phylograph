@@ -7,7 +7,7 @@ class Phylograph
   def self.create_adjacency_matrix(scores, nodup=true)
     matrix = Array.new
     scores.each_with_index do |row, i|
-      max, best = -1, 0
+      max, best = ALIGN_AT, 0
       bests = Array.new
       row.each_with_index do |score, j|
         if nodup and (score > ALIGN_AT) and (i != j)
