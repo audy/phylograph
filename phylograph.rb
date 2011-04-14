@@ -6,8 +6,8 @@ require 'progressbar'
 require 'parallel'
 require 'set'
 
-CLUSTER_AT = 80
-ALIGN_AT = 0.8
+CLUSTER_AT = 95
+ALIGN_AT = 0.96
 CUTOFF = 5
 
 class Phylograph
@@ -71,8 +71,11 @@ class Phylograph
 
     sets = Array.new
     first = matrices[@options[:filenames][0]].chunk(2).collect{ |x| x.sort! }
+    
+    # Get rid of baddies
+    second.chunk(2).delete_if{ |x| x.include? nil }
     second = matrices[@options[:filenames][1]].chunk(2).collect{ |x| x.sort! }
-
+    
     # Fancy subgraph finding algorithm
     consensus =  Graph.make_graph (first & second).flatten
     consensus.write_to_graphic_file
