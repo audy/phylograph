@@ -8,17 +8,18 @@ class Phylograph
     matrix = Array.new
     scores.each_with_index do |row, i|
       max, best = -1, 0
+      bests = Array.new
       row.each_with_index do |score, j|
-        if (score > max)
-          if nodup and (i != j)
-            max, best = score, j
-          elsif !nodup
-            max, best = score, j
-          end
+        if nodup and (score > ALIGN_AT) and (i != j)
+          bests << [i, j]
+        elsif (score > best) and !nodup
+          max, best = score, j
         end
       end
-      if max > 0
-        matrix << [i, best] #unless matrix.flatten.include? best
+      if !nodup and (max > 0)
+        matrix << [i, best]
+      elsif nodup
+        matrix << bests.flatten
       end
     end
     matrix.flatten

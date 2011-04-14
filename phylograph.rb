@@ -6,8 +6,8 @@ require 'progressbar'
 require 'parallel'
 require 'set'
 
-CLUSTER_AT = 99
-ALIGN_AT = 0.20
+CLUSTER_AT = 80
+ALIGN_AT = 0.80
 CUTOFF = 5
 
 class Phylograph
@@ -32,13 +32,15 @@ class Phylograph
       $stderr.puts " - #{filename}" 
       sequences = clusters[filename][:reps].values
       clusters[filename][:scores] = pairwise_align sequences, sequences
+      p clusters[filename][:scores]
     end
-    
+
     # ALIGN SAMPLES    
     $stderr.puts "Align samples"
     set_a = clusters[clusters.keys[0]][:reps].values
     set_b = clusters[clusters.keys[1]][:reps].values
     scores_between_samples = pairwise_align set_a, set_b
+
     
     clusters[:both] = Hash.new
     clusters[:both][:scores] = scores_between_samples
@@ -84,7 +86,7 @@ class Phylograph
     matrices.each_key do |key|
       graph = Graph.make_graph matrices[key]
       puts "#{key}"
-      puts "#{graph.inspect}"
+#      puts "#{graph.inspect}"
       graph.write_to_graphic_file
       `mv graph.dot out/#{File.basename(key.to_s)}.dot`
     end
