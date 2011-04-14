@@ -6,10 +6,11 @@ require 'progressbar'
 require 'parallel'
 require 'set'
 
-CLUSTER_AT = 90
-ALIGN_AT = 0.90
-CUTOFF = 100 - CLUSTER_AT
-LOG_CUTOFF = 1
+ALIGN_AT = 0.80
+CLUSTER_AT = 80
+CUTOFF = 20
+LOG_CUTOFF = 0.5
+BASE = 2
 
 class Phylograph
   def self.run!
@@ -37,12 +38,12 @@ class Phylograph
     # Normalize?
     $stderr.puts "Making distance matrices from counts!"
     matrices = Hash.new
-    adjacency_matrix = Array.new
     [0, 1].each do |n|
+      adjacency_matrix = Array.new
       counts[n].each_key do |i|
         counts[n].each_key do |j|
           a, b = counts[0][i], counts[1][j]
-          lr = Math.log(a/b.to_f, 2)
+          lr = Math.log(a/b.to_f, BASE)
           if (lr > -LOG_CUTOFF) and (lr < LOG_CUTOFF) and (i != j)
             adjacency_matrix << [i, j]
           end
@@ -50,8 +51,6 @@ class Phylograph
       end
       matrices[n] = adjacency_matrix.flatten
     end
-    
-    p matrices
     
     # ALIGN SAMPLES    
     $stderr.puts "Align samples"
@@ -102,7 +101,7 @@ class Phylograph
     
     # Print FASTA file
     output = File.new(@options[:output], 'w')
-    (first & second).flatten.each do |node|
+    (first & second).flatten.uniq.each do |node|
       sequence = clusters.values[0][:reps][node]
       counts = clusters.values[0][:counts][node]
       output.write(">#{node}:#{counts}\n#{sequence}\n")
