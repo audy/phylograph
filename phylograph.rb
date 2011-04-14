@@ -4,7 +4,7 @@ Dir.glob('./lib/*.rb').each { |file| require file }
 
 require 'progressbar'
 require 'parallel'
-require 'pp'
+require 'set'
 
 CLUSTER_AT = 80
 ALIGN_AT = 0.8
@@ -52,12 +52,39 @@ class Phylograph
     
     matrix = create_adjacency_matrix clusters[:both][:scores], nodup=false
     matrices[:both] = matrix
+  
     
-    # Now make graphs
-    matrices.keys do |key|
+    # Make translation hash
+    convert = Hash.new
+    matrices[:both].chunk(2).each do |i, j|
+      convert[i] = j
+      convert[j] = i
+    end
+    
+    # Make consensus graph
+    # Convert graph B to graph A names
+    second = matrices[@options[:filenames][1]]
+    second.each_with_index do |v, i|
+      second[i] = convert[v]
+    end
+    matrices[@options[:filenames][1]] = second
+
+    sets = Array.new
+    first = matrices[@options[:filenames][0]].chunk(2).collect{ |x| x.sort! }
+    second = matrices[@options[:filenames][1]].chunk(2).collect{ |x| x.sort! }
+
+    # Fancy subgraph finding algorithm
+    consensus =  Graph.make_graph (first & second).flatten
+    consensus.write_to_graphic_file
+    `mv graph.dot out/consensus.dot`
+    
+    # Draw graphs
+    matrices.each_key do |key|
       graph = Graph.make_graph matrices[key]
       puts "#{key}"
-      puts "#{graph.inspecct}"
+      puts "#{graph.inspect}"
+      graph.write_to_graphic_file
+      `mv graph.dot out/#{File.basename(key.to_s)}.dot`
     end
     
   end
