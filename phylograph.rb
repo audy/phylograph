@@ -6,8 +6,8 @@ require 'progressbar'
 require 'parallel'
 require 'set'
 
-CLUSTER_AT = 80
-ALIGN_AT = 0.80
+CLUSTER_AT = 85
+ALIGN_AT = 0.85
 CUTOFF = 5
 
 class Phylograph

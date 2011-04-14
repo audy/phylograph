@@ -16,6 +16,7 @@ class Cluster
       -i #{input} \
       -o #{output} \
       -c 0.#{similarity} \
+      -T 0 \
       > /dev/null"
     unless res
       $stderr.puts "cdhit failed"
