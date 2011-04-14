@@ -6,7 +6,7 @@ require 'progressbar'
 require 'parallel'
 require 'set'
 
-ALIGN_AT = 0.80
+ALIGN_AT = 0.90
 CLUSTER_AT = 80
 CUTOFF = 20
 LOG_CUTOFF = 0.5
@@ -93,8 +93,6 @@ class Phylograph
     # Draw graphs
     matrices.each_key do |key|
       graph = Graph.make_graph matrices[key]
-      puts "#{key}"
-#      puts "#{graph.inspect}"
       graph.write_to_graphic_file
       `mv graph.dot out/#{File.basename(key.to_s)}.dot`
     end
