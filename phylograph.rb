@@ -6,9 +6,9 @@ require 'progressbar'
 require 'parallel'
 require 'set'
 
-CLUSTER_AT = 85
-ALIGN_AT = 0.85
-CUTOFF = 5
+CLUSTER_AT = 95
+ALIGN_AT = 0.95
+CUTOFF = 100 - CLUSTER_AT
 
 class Phylograph
   def self.run!
