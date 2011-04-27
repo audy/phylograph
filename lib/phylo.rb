@@ -2,8 +2,10 @@
 require 'optparse'
 
 class Phylograph
+  def self.euclidean(x, y) 
+    Math.fabs(x**2 + y**2)
+  end
   
-  # CREATE ADJACENCY MATRICES
   def self.create_adjacency_matrix(scores, nodup=true)
     matrix = Array.new
     scores.each_with_index do |row, i|

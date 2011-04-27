@@ -10,7 +10,13 @@ ALIGN_AT = 0.90
 CLUSTER_AT = 80
 CUTOFF = 20
 LOG_CUTOFF = 0.5
+EUC_CUTOFF = 2000
 BASE = 2
+
+METHOD = :log_ratio
+#METHOD = :euclidean
+#METHOD = :goodall
+
 
 class Phylograph
   def self.run!
@@ -38,20 +44,39 @@ class Phylograph
     # Normalize?
     $stderr.puts "Making distance matrices from counts!"
     matrices = Hash.new
-    [0, 1].each do |n|
-      adjacency_matrix = Array.new
-      counts[n].each_key do |i|
-        counts[n].each_key do |j|
-          a, b = counts[0][i], counts[1][j]
-          lr = Math.log(a/b.to_f, BASE)
-          if (lr > -LOG_CUTOFF) and (lr < LOG_CUTOFF) and (i != j)
-            adjacency_matrix << [i, j]
+    
+      [0, 1].each do |n|
+    [0.01, 0.25, 0.5, 1, 2, 4].each do |cutoff|
+
+        adjacency_matrix = Array.new
+        counts[n].each_key do |i|
+          counts[n].each_key do |j|
+          
+            a, b = counts[0][i], counts[1][j]
+
+            if METHOD == :log_ratio
+              lr = Math.log(a/b.to_f, BASE)
+              if (lr > -cutoff) and (lr < cutoff) and (i != j)
+                adjacency_matrix << [i, j]
+              end
+            elsif METHOD == :euclidean
+              euclidean = Math.sqrt(a**2 + b**2)
+              if (euclidean < cutoff) and (i != j)
+                adjacency_matrix << [i, j]
+              end
+            elsif METHOD == :goodall
+              nil
+            end
+          
+          
           end
         end
-      end
-      matrices[n] = adjacency_matrix.flatten
+        matrices[n] = adjacency_matrix.flatten
+      puts "#{n}\t#{cutoff}\t#{adjacency_matrix.length}"
     end
-    
+
+    end
+
     # ALIGN SAMPLES    
     $stderr.puts "Align samples"
     set_a = clusters[clusters.keys[0]][:reps].values
